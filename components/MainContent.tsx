@@ -39,11 +39,27 @@ const features = [
     { title: 'Secure & Reliable', description: 'Enterprise-grade security and 99.9% uptime guarantee.', icon: 'shield-alt' },
   ];  
 
-const testimonials = [
-  { name: 'Sarah Chen', role: 'Event Director, TechCorp', quote: 'EventEase transformed how we manage our tech conferences.' },
-  { name: 'Marcus Rodriguez', role: 'Startup Founder', quote: 'EventEase made our launch event seamless and intuitive.' },
-  { name: 'Bob Smith', role: 'Community Manager', quote: 'The attendee engagement tools helped us create better connections.' },
-];
+  const testimonials = [
+    {
+      name: 'Sarah Chen',
+      role: 'Event Director, TechCorp',
+      quote: 'EventEase transformed how we manage our tech conferences.',
+      image: require('../assets/images/testimonials/sarah.jpg')
+    },
+    {
+      name: 'Marcus Rodriguez',
+      role: 'Startup Founder',
+      quote: 'EventEase made our launch event seamless and intuitive.',
+      image: require('../assets/images/testimonials/marcus.jpg')
+    },
+    {
+      name: 'Bob Smith',
+      role: 'Community Manager',
+      quote: 'The attendee engagement tools helped us create better connections.',
+      image: require('../assets/images/testimonials/bob.jpg')
+    }
+  ];
+  
 
 const partners = [
   { name: 'TechStart', logo: require('@/assets/images/partners/techstart.png') },
@@ -84,11 +100,21 @@ export default function MainContent() {
         <Text style={[styles.sectionTitle, { color: 'white' }]}>What Our Users Say</Text>
         {testimonials.map((testimonial, index) => (
           <View key={index} style={styles.testimonialCard}>
+            {/* Quote Icon */}
+            <FontAwesome5 name="quote-left" size={20} color="#768a96" style={styles.quoteIcon} />
+
             <Text style={styles.testimonialQuote}>
               “{testimonial.quote}”
             </Text>
-            <Text style={styles.testimonialName}>{testimonial.name}</Text>
-            <Text style={styles.testimonialRole}>{testimonial.role}</Text>
+
+            <View style={styles.authorRow}>
+              <Image source={testimonial.image} style={styles.testimonialImage} />
+              <View>
+                <Text style={styles.testimonialName}>{testimonial.name}</Text>
+                <Text style={styles.testimonialRole}>{testimonial.role}</Text>
+              </View>
+            </View>
+
           </View>
         ))}
       </View>
@@ -167,26 +193,45 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
   testimonialCard: {
-    marginBottom: 20,
-    paddingHorizontal: 10
+    backgroundColor: '#34495E',
+    padding: 20,
+    margin: 10,
+    borderRadius: 16,
+    marginBottom: 20
+  },
+  quoteIcon: {
+    marginBottom: 12,
   },
   testimonialQuote: {
     color: '#D0D3D4',
     fontSize: 16,
     fontStyle: 'italic',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: 16,
+    lineHeight: 22
+  },
+  authorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12, // optional: if RN version supports it
+  },
+  testimonialImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: 12
   },
   testimonialName: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 8
+    fontSize: 16
   },
   testimonialRole: {
     color: '#ABB2B9',
-    fontSize: 12,
-    textAlign: 'center'
+    fontSize: 13
   },
+  
   partnerLogos: {
     flexDirection: 'row',
     flexWrap: 'wrap',
