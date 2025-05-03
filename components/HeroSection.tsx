@@ -1,12 +1,46 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { Animated, View, Text, StyleSheet, Pressable } from "react-native";
+import { Animated, View, Text, StyleSheet, Pressable, Easing } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRef, useEffect } from 'react';
+
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 export default function HeroSection() {
-    // Add animation values for both buttons
-    const getStartedScale = new Animated.Value(1);
-    const exploreScale = new Animated.Value(1);
+    const getStartedScale = useRef(new Animated.Value(1)).current;
+    const exploreScale = useRef(new Animated.Value(1)).current;
+    const animation = useRef(new Animated.Value(0)).current;
 
-    // Animation functions for button press
+    // Animate gradient movement
+    useEffect(() => {
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(animation, {
+              toValue: 1,
+              duration: 8000,
+              easing: Easing.inOut(Easing.linear),
+              useNativeDriver: false
+            }),
+            Animated.timing(animation, {
+              toValue: 0,
+              duration: 8000,
+              easing: Easing.inOut(Easing.linear),
+              useNativeDriver: false
+            }),
+          ])
+        ).start();
+      }, []);
+      
+
+    const startX = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+    });
+
+    const endX = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 2],
+    });
+
+    // Button press animation
     const animatePress = (animatedValue: Animated.Value) => {
         Animated.spring(animatedValue, {
             toValue: 0.95,
@@ -16,7 +50,6 @@ export default function HeroSection() {
         }).start();
     };
 
-    // Animation functions for button release
     const animateRelease = (animatedValue: Animated.Value) => {
         Animated.spring(animatedValue, {
             toValue: 1,
@@ -27,10 +60,10 @@ export default function HeroSection() {
     };
 
     return (
-        <LinearGradient
+        <AnimatedLinearGradient
             colors={['#101e2e', '#44576d', '#44576d', '#101e2e']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+            start={{ x: startX, y: 0 }}
+            end={{ x: endX, y: 1 }}
             style={styles.heroGradient}
         >
             <View style={styles.hero}>
@@ -61,63 +94,63 @@ export default function HeroSection() {
                     </Animated.View>
                 </View>
             </View>
-        </LinearGradient>
-    )
+        </AnimatedLinearGradient>
+    );
 }
 
 const styles = StyleSheet.create({
     heroGradient: {
-        paddingVertical: 80
+        paddingVertical: 80,
     },
     hero: {
-        alignItems: 'center'
+        alignItems: 'center',
     },
     welcomeContainer: {
         alignItems: 'center',
-        marginBottom: 10
+        marginBottom: 10,
     },
     heroText: {
-        color: '#FFFFFF'
+        color: '#FFFFFF',
     },
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        lineHeight: 38
+        lineHeight: 38,
     },
     subtitle: {
         fontSize: 18,
         textAlign: 'center',
-        marginTop: 10
+        marginTop: 10,
     },
     buttonContainer: {
         flexDirection: 'row',
         gap: 12,
-        marginTop: 24
+        marginTop: 24,
     },
     button: {
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 25,
-        minWidth: 140
+        minWidth: 140,
     },
     primaryButton: {
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
     },
     secondaryButton: {
         backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: '#FFFFFF'
+        borderColor: '#FFFFFF',
     },
     primaryButtonText: {
         textAlign: 'center',
         fontSize: 16,
         fontWeight: '600',
-        color: '#2D3436'
+        color: '#2D3436',
     },
     secondaryButtonText: {
         textAlign: 'center',
         fontSize: 16,
         fontWeight: '600',
-        color: '#FFFFFF'
-    }
-})
+        color: '#FFFFFF',
+    },
+});
